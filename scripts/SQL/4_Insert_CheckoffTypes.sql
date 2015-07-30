@@ -1,1 +1,0 @@
-INSERT INTO CHECKOFF_TYPE(VERSION, NAME) VALUES (0, 'per head'), (0, 'per pound');
