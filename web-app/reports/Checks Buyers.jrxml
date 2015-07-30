@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Checks Buyers" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="seller_id" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+     distinct buyer.`name` AS buyer_name,
+     buyer.`street_address` AS buyer_street_address,
+     buyer.`city` AS buyer_city,
+     buyer.`state` AS buyer_state,
+     buyer.`zip` AS buyer_zip,
+     species.`name` AS species_name
+FROM
+     `buyer` buyer INNER JOIN `purchase` purchase ON buyer.`id` = purchase.`buyer_id`
+     INNER JOIN `animal` animal ON purchase.`animal_id` = animal.`id`
+     INNER JOIN `species` species ON animal.`species_id` = species.`id`
+     INNER JOIN `seller` seller ON animal.`seller_id` = seller.`id`
+where seller.`id` = $P{seller_id}
+group by species.`name`]]>
+	</queryString>
+	<field name="buyer_name" class="java.lang.String"/>
+	<field name="buyer_street_address" class="java.lang.String"/>
+	<field name="buyer_city" class="java.lang.String"/>
+	<field name="buyer_state" class="java.lang.String"/>
+	<field name="buyer_zip" class="java.lang.String"/>
+	<field name="species_name" class="java.lang.String"/>
+	<variable name="city_state_zip" class="java.lang.String">
+		<variableExpression><![CDATA[$F{buyer_city} + ", " + $F{buyer_state} + "  " + $F{buyer_zip}]]></variableExpression>
+	</variable>
+	<group name="species">
+		<groupExpression><![CDATA[$F{species_name}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="36" y="6" width="100" height="13"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{species_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="13">
+			<textField>
+				<reportElement x="0" y="0" width="249" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{buyer_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="249" y="0" width="126" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{buyer_street_address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="375" y="0" width="180" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{city_state_zip}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

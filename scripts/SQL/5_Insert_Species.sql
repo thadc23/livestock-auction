@@ -1,0 +1,9 @@
+INSERT INTO SPECIES(ID, NAME, VERSION, CHECKOFF_AMOUNT, CHECKOFF_TYPE_ID) 
+VALUES 
+(1, 'SWINE', 0, 1, 1),
+(2, 'STEER', 0, 1, 1),
+(3, 'RABBIT', 0, 1, 1),
+(4, 'POULTRY', 0, 1, 1),
+(5, 'GOAT', 0, 1, 1),
+(6, 'SHEEP', 0, 1, 1),
+(7, 'MISC', 0, 1, 1);

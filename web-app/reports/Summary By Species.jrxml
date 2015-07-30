@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Summary By Species" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SPECIES_NAME" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT A.LOT_NUMBER, A.MARKET_BID, A.PRICE_PER_POUND, D.NAME AS DESTINATION_NAME, P.COST, B.BUYER_NUMBER, S.FIRST_NAME, S.LAST_NAME  FROM ANIMAL A INNER JOIN SELLER S ON A.SELLER_ID = S.ID INNER JOIN PURCHASE P ON A.ID = P.ANIMAL_ID INNER JOIN BUYER B ON P.BUYER_ID = B.ID INNER JOIN DESTINATION D ON D.ID = A.DESTINATION_ID INNER JOIN SPECIES SP ON A.SPECIES_ID = SP.ID WHERE SP.NAME = $P{SPECIES_NAME} ORDER BY LOT_NUMBER]]>
+	</queryString>
+	<field name="LOT_NUMBER" class="java.lang.Integer"/>
+	<field name="MARKET_BID" class="java.lang.Double"/>
+	<field name="PRICE_PER_POUND" class="java.lang.Double"/>
+	<field name="DESTINATION_NAME" class="java.lang.String"/>
+	<field name="COST" class="java.lang.Double"/>
+	<field name="BUYER_NUMBER" class="java.lang.Integer"/>
+	<field name="FIRST_NAME" class="java.lang.String"/>
+	<field name="LAST_NAME" class="java.lang.String"/>
+	<variable name="variable1" class="java.lang.String">
+		<variableExpression><![CDATA[$F{FIRST_NAME}+" "+$F{LAST_NAME}]]></variableExpression>
+	</variable>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement x="0" y="5" width="46" height="20"/>
+				<textElement/>
+				<text><![CDATA[LOT #]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="46" y="5" width="35" height="20"/>
+				<textElement/>
+				<text><![CDATA[MKT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="81" y="5" width="200" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[SELLER NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="281" y="5" width="44" height="20"/>
+				<textElement/>
+				<text><![CDATA[BUYER#]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="325" y="5" width="45" height="20"/>
+				<textElement/>
+				<text><![CDATA[P/LB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="5" width="160" height="20"/>
+				<textElement/>
+				<text><![CDATA[DESTINATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="530" y="5" width="42" height="20"/>
+				<textElement/>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="31">
+			<textField>
+				<reportElement x="46" y="0" width="35" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{MARKET_BID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="325" y="0" width="45" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{PRICE_PER_POUND}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="0" width="160" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DESTINATION_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="530" y="0" width="42" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{COST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="281" y="0" width="44" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{BUYER_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="81" y="0" width="200" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{variable1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="46" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{LOT_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

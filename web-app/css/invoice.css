@@ -1,0 +1,38 @@
+.invoiceTable {
+	width: 300px;
+	float: left;
+}
+
+.tableList {
+	margin-left: 400px;
+	width: 400px;
+	display: none;
+}
+#buyers {
+	margin-top: 2em;	
+}
+
+.removeColumn {
+	width: 70px;
+}
+.tagNumberColumn {
+	width: 50px;
+}
+.sellerColumn {
+	width: 200px;
+}
+.weightColumn {
+	width: 80px;
+}
+.amountDueColumn {
+	width:80px;
+}
+.buyerNumberColumn {
+	width:60px;
+}
+.buyerNameColumn {
+	width:190px;
+}
+.imageLink {
+	cursor: pointer;
+}

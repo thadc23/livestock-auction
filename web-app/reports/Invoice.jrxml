@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoice" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cf9b5ecb-d74d-45e7-9e12-8292d325c311">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="Buyer" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT B.BUYER_NUMBER, B.NAME, B.STREET_ADDRESS, B.CITY, B.STATE, B.ZIP, P.COST, A.TAG_NUMBER, A.MARKET_BID, A.PRICE_PER_POUND, A.WEIGHT, D.NAME AS DESTINATION_NAME, SP.NAME AS SPECIES_NAME, S.FIRST_NAME, S.LAST_NAME, A.WEIGHT * A.PRICE_PER_POUND AS ANIMAL_TOTAL FROM BUYER B INNER JOIN PURCHASE P ON P.BUYER_ID = B.ID INNER JOIN ANIMAL A ON P.ANIMAL_ID = A.ID INNER JOIN DESTINATION D ON A.DESTINATION_ID = D.ID INNER JOIN SPECIES SP ON A.SPECIES_ID = SP.ID INNER JOIN SELLER S ON A.SELLER_ID = S.ID WHERE BUYER_NUMBER = $P{Buyer}]]>
+	</queryString>
+	<field name="buyer_number" class="java.lang.Integer"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="street_address" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="state" class="java.lang.String"/>
+	<field name="zip" class="java.lang.String"/>
+	<field name="cost" class="java.lang.Double"/>
+	<field name="tag_number" class="java.lang.String"/>
+	<field name="market_bid" class="java.lang.Double"/>
+	<field name="price_per_pound" class="java.lang.Double"/>
+	<field name="weight" class="java.lang.Integer"/>
+	<field name="destination_name" class="java.lang.String"/>
+	<field name="species_name" class="java.lang.String"/>
+	<field name="first_name" class="java.lang.String"/>
+	<field name="last_name" class="java.lang.String"/>
+	<field name="animal_total" class="java.lang.Double"/>
+	<variable name="SELLER_NAME" class="java.lang.String">
+		<variableExpression><![CDATA[$F{first_name} + " " + $F{last_name}]]></variableExpression>
+	</variable>
+	<variable name="ANIMAL_TOTAL" class="java.lang.String">
+		<variableExpression><![CDATA[$F{weight} * $F{price_per_pound}]]></variableExpression>
+	</variable>
+	<variable name="WEIGHT_1" class="java.lang.Integer" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight}]]></variableExpression>
+	</variable>
+	<variable name="ANIMAL_TOTAL_1" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{animal_total}]]></variableExpression>
+	</variable>
+	<variable name="COST_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{cost}]]></variableExpression>
+	</variable>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="125">
+			<staticText>
+				<reportElement uuid="e3de683d-e166-49cf-87e7-9269d6e4b7a3" x="0" y="0" width="572" height="34"/>
+				<textElement textAlignment="Center">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Starke County Fair Board]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="03b8eb89-d8a5-4592-85ad-8b0e71cd9cf0" x="208" y="34" width="148" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Courthouse, 53 E. Washington]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="026eacbe-671b-4cd9-ae3b-e7fc8e5797be" x="208" y="54" width="148" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Knox, IN  46534]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ea6c85d0-44e4-4fc2-9101-bc43a37e49d7" x="208" y="74" width="148" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[(574) 772-9141]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="90">
+			<textField>
+				<reportElement uuid="f2c810a4-516e-48fd-971e-5a898dbbdc27" x="102" y="20" width="472" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="837f776c-1a28-4ce5-baa6-16bf752093f0" x="102" y="40" width="472" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{street_address}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f2e2b65b-579d-4687-bbae-a4216bedf664" x="0" y="0" width="42" height="20"/>
+				<textElement/>
+				<text><![CDATA[Buyer #]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2bf76a38-c7d1-468f-af93-2e551bc9809a" x="42" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{buyer_number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bf4fe511-140a-4904-b0ef-c8759c2f1e87" x="102" y="60" width="75" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{city}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d9317192-491d-4e62-9892-3bc35be598e1" x="177" y="60" width="63" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{state}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a89426a9-d315-4195-a59d-7b842ccb6dcc" x="240" y="60" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{zip}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="22">
+			<staticText>
+				<reportElement uuid="e2beb396-ec0b-4a06-a183-1581bfdc5f79" x="0" y="0" width="42" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tag #]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="078c9d94-b7b1-4a99-ab4e-0459f206bf74" x="42" y="0" width="135" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Seller]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2e0b3050-6eff-4ef9-9379-ca5a79ce503d" x="229" y="0" width="54" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Weight]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f3032b28-c9cb-49ba-8359-0a9dceed14de" x="283" y="0" width="44" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Price/LB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c86524f4-0b94-436d-a15d-387827fd3bd7" x="327" y="0" width="46" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edf7a128-a976-4562-bb31-bedf9b53b72f" x="177" y="0" width="52" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Species]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="7bdaf6f8-62ad-4383-b483-02ae61472329" x="2" y="20" width="570" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="50f0ce6f-9ada-4013-bde1-0b1c9b363a68" x="373" y="0" width="113" height="20"/>
+				<textElement/>
+				<text><![CDATA[Destination]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8ce7c10f-1f34-4fe9-b049-013ac56574c3" x="486" y="0" width="86" height="20"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Amount Due]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21">
+			<textField>
+				<reportElement uuid="401cf3ad-0dba-4409-b978-a04b6585161b" x="373" y="0" width="113" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{destination_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="0030775e-0b60-4844-b425-44d58510d7fd" x="0" y="0" width="42" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{tag_number}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5216e886-763a-4754-9154-d29b57359f25" x="42" y="0" width="135" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{SELLER_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5b0dffaf-919e-42de-9c5d-2dcd8dab06a0" x="229" y="0" width="54" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="55a3ae58-ebef-4a27-93a0-129733590fcb" x="283" y="0" width="44" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{price_per_pound}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="ef1a8440-b201-46b1-8bb7-1f13d49cb5bb" x="327" y="0" width="46" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{animal_total}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="7d2dc9cc-877a-44eb-8a93-ef9339561b8d" x="486" y="0" width="86" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{cost}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d3ac20b2-c5de-4d11-978b-1818bba70256" x="177" y="0" width="52" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{species_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54">
+			<staticText>
+				<reportElement uuid="fc3c0e96-e4ac-4949-bfb9-9b0ef69d3496" x="42" y="18" width="495" height="23"/>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Starke County Fair Board and 4-H Members Thank You!!]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="25">
+			<textField>
+				<reportElement uuid="3b9d4ee2-5170-471d-91b0-07668a1eb336" x="229" y="5" width="36" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{WEIGHT_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="d2412a8f-9380-4fb2-96b4-f124138f5f4d" x="327" y="5" width="46" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{ANIMAL_TOTAL_1}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="4e4608d5-3dbd-499a-993b-a5edd18f58a2" x="4" y="0" width="570" height="1"/>
+			</line>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="6b25704b-7914-4111-a144-039ad2074194" x="486" y="5" width="86" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COST_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b1fd693a-af83-4615-8210-8689537eee05" x="373" y="5" width="113" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Amount Due]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="7fc46084-24e0-4423-9224-75fdd53e55c7" mode="Transparent" x="486" y="5" width="86" height="20"/>
+			</rectangle>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Champions Sale Summary" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     animal.`price_per_pound` AS animal_price_per_pound,
+     buyer.`name` AS buyer_name,
+     seller.`last_name` AS seller_last_name,
+     seller.`first_name` AS seller_first_name,
+     champion.`name` AS champion_name,
+     species.`name` AS species_name,
+     animal.`price_per_pound` * animal.`weight` as total_cost
+FROM
+     `animal` animal INNER JOIN `purchase` purchase ON animal.`id` = purchase.`animal_id`
+     INNER JOIN `buyer` buyer ON purchase.`buyer_id` = buyer.`id`
+     INNER JOIN `seller` seller ON animal.`seller_id` = seller.`id`
+     INNER JOIN `champion` champion ON animal.`id` = champion.`animal_id`
+     INNER JOIN `species` species ON animal.`species_id` = species.`id`]]>
+	</queryString>
+	<field name="animal_price_per_pound" class="java.lang.Double"/>
+	<field name="buyer_name" class="java.lang.String"/>
+	<field name="seller_last_name" class="java.lang.String"/>
+	<field name="seller_first_name" class="java.lang.String"/>
+	<field name="champion_name" class="java.lang.String"/>
+	<field name="species_name" class="java.lang.String"/>
+	<field name="total_cost" class="java.lang.Double"/>
+	<variable name="SELLER_NAME" class="java.lang.String">
+		<variableExpression><![CDATA[$F{seller_first_name} + " " + $F{seller_last_name}]]></variableExpression>
+	</variable>
+	<variable name="per_pound" class="java.lang.String">
+		<variableExpression><![CDATA[$F{animal_price_per_pound} + "/lb"]]></variableExpression>
+	</variable>
+	<group name="species">
+		<groupExpression><![CDATA[$F{species_name}]]></groupExpression>
+		<groupHeader>
+			<band height="31">
+				<textField>
+					<reportElement x="0" y="0" width="100" height="20"/>
+					<textElement>
+						<font isBold="true" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{species_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="55">
+			<staticText>
+				<reportElement x="204" y="0" width="172" height="42"/>
+				<textElement textAlignment="Center">
+					<font size="24" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[CHAMPIONS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="59">
+			<textField>
+				<reportElement x="0" y="0" width="572" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{champion_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="32" width="169" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{SELLER_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="32" width="207" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{buyer_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="476" y="32" width="96" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total_cost}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="376" y="32" width="100" height="20">
+					<printWhenExpression><![CDATA[$F{animal_price_per_pound} != $F{total_cost}]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{per_pound}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="55" width="572" height="1"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

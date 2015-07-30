@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Checks" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="3"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#228B22">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFFFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     seller.`last_name` AS seller_last_name,
+     seller.`first_name` AS seller_first_name,
+     seller.`id`,
+     seller.`street_address`,
+     seller.`city`,
+     seller.`state`,
+     seller.`zip`,
+     SUM(ROUND(TEMP.total_cost, 2) - ROUND(TEMP.fair_commission, 2) - ROUND(TEMP.checkoff_amount, 2)) AS seller_total
+FROM
+     `seller` seller INNER JOIN `animal` animal ON seller.`id` = animal.`seller_id`
+     INNER JOIN `species` species ON animal.`species_id` = species.`id`
+     INNER JOIN
+     (SELECT distinct animal2.`id`, species2.`checkoff_amount` *
+     (CASE checkoff_type.`name` WHEN 'per pound' THEN  animal2.`weight` WHEN 'gross market value' THEN animal2.`weight` * animal2.`market_bid`      ELSE 1 END) AS checkoff_amount, animal2.`weight` * animal2.`price_per_pound` AS total_cost, animal2.`weight` * animal2.`price_per_pound` * .03 AS fair_commission from `animal` animal2 INNER JOIN `species` species2 ON animal2.`species_id` = species2.`id`  left outer JOIN `checkoff_type` checkoff_type ON species2.`checkoff_type_id` = checkoff_type.`id`) TEMP ON TEMP.id = animal.`id`
+where animal.`price_per_pound` != 0
+GROUP BY
+     seller.`id`]]>
+	</queryString>
+	<field name="seller_last_name" class="java.lang.String"/>
+	<field name="seller_first_name" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="street_address" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="state" class="java.lang.String"/>
+	<field name="zip" class="java.lang.String"/>
+	<field name="seller_total" class="java.lang.Double"/>
+	<variable name="seller_total_1" class="java.lang.Double" resetType="Group" resetGroup="seller" calculation="Sum">
+		<variableExpression><![CDATA[$F{seller_total}]]></variableExpression>
+	</variable>
+	<variable name="seller_name" class="java.lang.String">
+		<variableExpression><![CDATA[$F{seller_first_name} + " " + $F{seller_last_name}]]></variableExpression>
+	</variable>
+	<variable name="city_state_zip" class="java.lang.String">
+		<variableExpression><![CDATA[$F{city} + ", " + $F{state} + "  " + $F{zip}]]></variableExpression>
+	</variable>
+	<group name="seller">
+		<groupExpression><![CDATA[$F{id}]]></groupExpression>
+		<groupHeader>
+			<band height="247">
+				<textField evaluationTime="Group" evaluationGroup="seller" isBlankWhenNull="true">
+					<reportElement x="46" y="182" width="215" height="20" printWhenGroupChanges="seller"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$V{city_state_zip}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="seller" isBlankWhenNull="true">
+					<reportElement x="46" y="162" width="215" height="20" printWhenGroupChanges="seller"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{street_address}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="seller" isBlankWhenNull="true">
+					<reportElement x="46" y="142" width="215" height="20" printWhenGroupChanges="seller"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$V{seller_name}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="seller" isBlankWhenNull="false">
+					<reportElement x="69" y="67" width="273" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$V{seller_name}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="472" y="34" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="seller" pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement x="490" y="67" width="82" height="20" printWhenGroupChanges="seller"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{seller_total_1}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="seller" isBlankWhenNull="true">
+					<reportElement x="33" y="97" width="309" height="20" printWhenGroupChanges="seller"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[numberformat.EnglishNumberToWords.convert($V{seller_total_1})]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="23">
+				<break>
+					<reportElement x="0" y="12" width="100" height="1"/>
+				</break>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="361">
+			<subreport>
+				<reportElement x="0" y="0" width="572" height="81"/>
+				<subreportParameter name="seller_id">
+					<subreportParameterExpression><![CDATA[$F{id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Checks Animals.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="0" y="81" width="572" height="44"/>
+				<subreportParameter name="seller_id">
+					<subreportParameterExpression><![CDATA[$F{id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Checks Buyers.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="0" y="317" width="572" height="44"/>
+				<subreportParameter name="seller_id">
+					<subreportParameterExpression><![CDATA[$F{id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Checks Buyers.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="0" y="242" width="572" height="49"/>
+				<subreportParameter name="seller_id">
+					<subreportParameterExpression><![CDATA[$F{id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Checks Animals.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
